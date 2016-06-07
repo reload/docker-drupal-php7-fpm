@@ -49,4 +49,6 @@ RUN \
 # default settings from packages.
 COPY files/etc/ /etc/
 
+RUN phpenmod drupal-recommended
+
 EXPOSE 9000
