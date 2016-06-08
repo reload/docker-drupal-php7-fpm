@@ -30,11 +30,14 @@ RUN \
   chown www-data:www-data /var/log/fpm-php.www.log
 
 # Install composer 1.1.2  using the latest installer.
+# We compare the downloaded installer with a hash from a second source to reduce
+# the chanche we're downloading a compromised installer.
 RUN curl -o /tmp/composer-installer https://getcomposer.org/installer && \
   curl -o /tmp/composer-installer.sig https://composer.github.io/installer.sig &&  \
   php -r "if (hash('SHA384', file_get_contents('/tmp/composer-installer')) !== trim(file_get_contents('/tmp/composer-installer.sig'))) { unlink('/tmp/composer-installer'); echo 'Invalid installer' . PHP_EOL; exit(1); }" && \
   php /tmp/composer-installer --version=1.1.2 --filename=composer --install-dir=/usr/local/bin && \
-  php -r "unlink('/tmp/composer-installer');"
+  php -r "unlink('/tmp/composer-installer');" && \
+  php -r "unlink('/tmp/composer-installer.sig');"
 
 # Install drush 8 via composer
 # See http://docs.drush.org/en/master/install-alternative/#install-a-global-drush-via-composer
