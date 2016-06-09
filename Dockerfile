@@ -12,6 +12,7 @@ RUN \
       php7.0-gd \
       php7.0-xml \
       php7.0-mysql \
+      php7.0-mbstring \
       php-xdebug \
       # Mysql-client added to support eg. drush sqlc
       mysql-client \
