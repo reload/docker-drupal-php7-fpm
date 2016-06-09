@@ -12,15 +12,29 @@ RUN \
       php7.0-gd \
       php7.0-xml \
       php7.0-mysql \
+      php7.0-mbstring \
       php-xdebug \
       # Mysql-client added to support eg. drush sqlc
       mysql-client \
       # Git and unzip are required by composer
       git \
       unzip \
+      wget \
+      curl \
+      iputils-ping \
+      telnet \
   && \
   apt-get clean && \
   rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+# Add the blackfire repo and install the php-probe.
+RUN \
+  wget -O - https://packagecloud.io/gpg.key | apt-key add - && \
+  echo "deb http://packages.blackfire.io/debian any main" | tee /etc/apt/sources.list.d/blackfire.list && \
+  apt-get update && \
+  DEBIAN_FRONTEND=noninteractive \
+    apt-get -y install blackfire-php
+
 
 # Setup fpm paths and log
 RUN \
