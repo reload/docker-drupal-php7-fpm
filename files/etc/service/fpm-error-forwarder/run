@@ -1,3 +1,0 @@
-#!/bin/sh
-touch /var/log/fpm-php.www.log
-exec tail -F -n 0 /var/log/fpm-php.www.log
