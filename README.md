@@ -55,7 +55,4 @@ blackfire:
     environment:
       BLACKFIRE_SERVER_ID: 'INSERT-SERVER-ID-HERE'
       BLACKFIRE_SERVER_TOKEN: 'INSERT-SERVER-TOKEN-HERE'
-
-
-
 ```
