@@ -21,6 +21,8 @@ RUN \
       unzip \
       wget \
       curl \
+      iputils-ping \
+      telnet \
   && \
   apt-get clean && \
   rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
