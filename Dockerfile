@@ -1,4 +1,4 @@
-FROM sunfoxcz/baseimage:0.10.1
+FROM phusion/baseimage:0.9.19
 
 MAINTAINER Mads H. Danquah <mads@reload.dk>
 
