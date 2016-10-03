@@ -65,6 +65,12 @@ RUN \
   composer config bin-dir /usr/local/bin && \
   composer install
 
+# Install latest release of drupal console
+RUN \
+  curl https://drupalconsole.com/installer -L -o /usr/local/bin/drupal && \
+  chmod +x /usr/local/bin/drupal && \
+  drupal check
+
 # Put our configurations in place, done as the last step to be able to override
 # default settings from packages.
 COPY files/etc/ /etc/
