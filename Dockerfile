@@ -69,6 +69,7 @@ RUN \
 RUN \
   curl https://drupalconsole.com/installer -L -o /usr/local/bin/drupal && \
   chmod +x /usr/local/bin/drupal && \
+  drupal init -y && \
   drupal check
 
 # Put our configurations in place, done as the last step to be able to override
