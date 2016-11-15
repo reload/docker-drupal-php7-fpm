@@ -23,6 +23,7 @@ RUN \
       curl \
       iputils-ping \
       telnet \
+      inotify-tools \
   && \
   apt-get clean && \
   rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
@@ -65,10 +66,19 @@ RUN \
   composer config bin-dir /usr/local/bin && \
   composer install
 
+# Setup xdebug trace and profiler paths.
+RUN \
+  mkdir -p /var/xdebug/internal/profiler/ && \
+  chown -R www-data:www-data /var/xdebug/internal/profiler/ && \
+  mkdir -p /var/xdebug/external/profiler/ && \
+  mkdir -p /var/xdebug/internal/trace/ && \
+  chown -R www-data:www-data /var/xdebug/internal/trace/ && \
+  mkdir -p /var/xdebug/external/trace/
+
 # Put our configurations in place, done as the last step to be able to override
 # default settings from packages.
 COPY files/etc/ /etc/
 
-RUN phpenmod drupal-recommended
+RUN phpenmod drupal-recommended xdebug
 
 EXPOSE 9000
