@@ -36,16 +36,16 @@ services:
     image: reload/drupal-php7-fpm
     links:
       - db
+    environment:
+      SOME_IMPORTANT_ENV: 'secret'
 
 # file: docker-compose.override.yml
 version: "2"
 
 services:
   php:
-    links:
-      - db
-      - blackfire
     environment:
+      SOME_IMPORTANT_ENV: 'secret'
       BLACKFIRE_SOCKET: 'tcp://blackfire:8707'
 
 blackfire:
@@ -56,3 +56,52 @@ blackfire:
       BLACKFIRE_SERVER_ID: 'INSERT-SERVER-ID-HERE'
       BLACKFIRE_SERVER_TOKEN: 'INSERT-SERVER-TOKEN-HERE'
 ```
+
+## Mailhog (and other mailcatcher) integration
+You can specify the path to the sendmail php should use to either setup a mail-catcher or disable mail-sending (set it to /bin/false).
+
+You specify the path to sendmail via the PHP_SENDMAIL_PATH environment-variable. Eg. for a permanent setup via docker-compose.yml that has a mailhog container:
+```
+version: "2"
+
+services:
+    php:
+      image: reload/drupal-php7-fpm
+      ...
+      environment:
+        PHP_SENDMAIL_PATH: /usr/local/bin/mhsendmail --smtp-addr="mailhog:1025"
+
+    mailhog:
+      image: mailhog/mailhog
+      # Web-inteface exposed on port 8025
+      ports:
+        - "8025:8025"
+```
+This can also be done via docker-compose.override.yml for temporary local setups, again, remember to bring over any environment-variables you want to maintain as variables added via docker-compose.override.yml's overrides the entire environment array.
+```
+# file: docker-compose.yml
+version: "2"
+
+services:
+  php:
+    image: reload/drupal-php7-fpm
+    ...
+    environment:
+      SOME_IMPORTANT_ENV: 'secret'
+
+# file: docker-compose.override.yml
+version: "2"
+
+services:
+  php:
+    environment:
+      SOME_IMPORTANT_ENV: 'secret'
+      PHP_SENDMAIL_PATH: /usr/local/bin/mhsendmail --smtp-addr="mailhog:1025"
+
+  mailhog:
+    image: mailhog/mailhog
+    ports:
+      - "8025:8025"
+```
+
+In the above examples the mailhog interface will be accessible on port 8025.
