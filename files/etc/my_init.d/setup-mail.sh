@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-# Ensure Blackfire is only enabled if we have the necessary configuration.
+# Enable a simple "module" that will override the path to sendmail if the
+# user has specified one via the environment variable PHP_SENDMAIL_PATH.
 set -euo pipefail
 IFS=$'\n\t'
 
