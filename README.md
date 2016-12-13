@@ -36,16 +36,16 @@ services:
     image: reload/drupal-php7-fpm
     links:
       - db
+    environment:
+      SOME_IMPORTANT_ENV: 'secret'
 
 # file: docker-compose.override.yml
 version: "2"
 
 services:
   php:
-    links:
-      - db
-      - blackfire
     environment:
+      SOME_IMPORTANT_ENV: 'secret'
       BLACKFIRE_SOCKET: 'tcp://blackfire:8707'
 
 blackfire:
