@@ -65,6 +65,11 @@ RUN \
   composer config bin-dir /usr/local/bin && \
   composer install
 
+# Install mailhog sender for mailhog integration
+RUN \
+  curl --location --output /usr/local/bin/mhsendmail https://github.com/mailhog/mhsendmail/releases/download/v0.2.0/mhsendmail_linux_amd64 && \
+  chmod +x /usr/local/bin/mhsendmail
+
 # Put our configurations in place, done as the last step to be able to override
 # default settings from packages.
 COPY files/etc/ /etc/
