@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+set -euo pipefail
+IFS=$'\n\t'
+
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+# Disable is done on exit, this means that no matter what happens (eg the
+# user doing a ^C) we will attempt to re-disable xdebug.
+disable() {
+    echo '- disabling xdebug' && \
+    phpdismod xdebug
+    echo '- reloading php-fpm'
+    pkill -HUP 'php-fpm'
+    exit $?
+}
+# Trap exit
+trap disable EXIT
+
+# First step is to enable xdebug.
+echo '- enabling xdebug'
+phpenmod xdebug
+echo '- reloading php-fpm'
+pkill -HUP 'php-fpm'
+
+# Then we prompt the user.
+echo ""
+read -p "*** Xdebug enabled, press enter to disable again ***"
+echo ""
+
+# When we reach this point the script exists, and triggers our trap.
