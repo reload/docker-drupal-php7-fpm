@@ -35,12 +35,13 @@ RUN \
 RUN phpdismod xdebug
 
 # Add the blackfire repo and install the php-probe.
+# We also fetch the blackfire-agent to get access to the commandlineuploader.
 RUN \
   wget -O - https://packagecloud.io/gpg.key | apt-key add - && \
   echo "deb http://packages.blackfire.io/debian any main" | tee /etc/apt/sources.list.d/blackfire.list && \
   apt-get update && \
   DEBIAN_FRONTEND=noninteractive \
-    apt-get -y install blackfire-php && \
+    apt-get -y install blackfire-php blackfire-agent && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
