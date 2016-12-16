@@ -13,6 +13,8 @@ RUN \
       php7.0-xml \
       php7.0-mysql \
       php7.0-mbstring \
+      # BC math is required by Commerce.
+      php7.0-bcmath \
       php-xdebug \
       # Mysql-client added to support eg. drush sqlc
       mysql-client \
