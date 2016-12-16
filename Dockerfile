@@ -20,20 +20,28 @@ RUN \
       git \
       unzip \
       wget \
+      dnsutils \
       curl \
       iputils-ping \
       telnet \
+      imagemagick \
   && \
   apt-get clean && \
   rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
+# We disable xdebug pr default and leave it up to the user of the image to
+# enable at runtime. We disable it right away so that composer used in a
+# later step runs a bit faster.
+RUN phpdismod xdebug
+
 # Add the blackfire repo and install the php-probe.
+# We also fetch the blackfire-agent to get access to the commandlineuploader.
 RUN \
   wget -O - https://packagecloud.io/gpg.key | apt-key add - && \
   echo "deb http://packages.blackfire.io/debian any main" | tee /etc/apt/sources.list.d/blackfire.list && \
   apt-get update && \
   DEBIAN_FRONTEND=noninteractive \
-    apt-get -y install blackfire-php && \
+    apt-get -y install blackfire-php blackfire-agent && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
@@ -73,6 +81,9 @@ RUN \
 # Put our configurations in place, done as the last step to be able to override
 # default settings from packages.
 COPY files/etc/ /etc/
+
+# Add our tools to PATH.
+COPY files/bin /usr/local/bin/
 
 RUN phpenmod drupal-recommended
 
