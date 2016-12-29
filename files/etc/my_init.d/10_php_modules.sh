@@ -1,4 +1,5 @@
 #!/bin/bash
+set -euo pipefail
 
 PHP_EXTENSIONS="${PHP_DEFAULT_EXTENSIONS} ${PHP_EXTRA_EXTENSIONS}"
 PHP_AVAILABLE_EXTENSIONS=$(/usr/sbin/phpquery -q -v "${PHP_VERSION}" -s ALL -M)
