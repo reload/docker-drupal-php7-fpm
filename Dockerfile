@@ -20,6 +20,7 @@ RUN \
       php${PHP_VERSION}-soap \
       php${PHP_VERSION}-zip \
       php${PHP_VERSION}-intl \
+      php${PHP_VERSION}-bcmath \
       php-memcache \
       php-memcached \
       # Mysql-client added to support eg. drush sqlc
