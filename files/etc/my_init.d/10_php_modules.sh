@@ -1,6 +1,9 @@
 #!/bin/bash
 set -euo pipefail
 
+# Make sure variable is set, or script will fail.
+PHP_EXTRA_EXTENSIONS=${PHP_EXTRA_EXTENSIONS:-}
+
 PHP_EXTENSIONS="${PHP_DEFAULT_EXTENSIONS} ${PHP_EXTRA_EXTENSIONS}"
 PHP_AVAILABLE_EXTENSIONS=$(/usr/sbin/phpquery -q -v "${PHP_VERSION}" -s ALL -M)
 
