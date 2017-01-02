@@ -2,18 +2,27 @@ FROM phusion/baseimage:0.9.19
 
 MAINTAINER Mads H. Danquah <mads@reload.dk>
 
+ENV PHP_VERSION 7.0
+
 # Basic package installation
 RUN \
   apt-get update && \
   DEBIAN_FRONTEND=noninteractive \
     apt-get -y install \
-      php7.0-fpm \
-      php7.0-curl \
-      php7.0-gd \
-      php7.0-xml \
-      php7.0-mysql \
-      php7.0-mbstring \
+      php${PHP_VERSION}-fpm \
+      php${PHP_VERSION}-curl \
+      php${PHP_VERSION}-gd \
+      php${PHP_VERSION}-xml \
+      php${PHP_VERSION}-mysql \
+      php${PHP_VERSION}-mbstring \
       php-xdebug \
+      php${PHP_VERSION}-mcrypt \
+      php${PHP_VERSION}-soap \
+      php${PHP_VERSION}-zip \
+      php${PHP_VERSION}-intl \
+      php${PHP_VERSION}-bcmath \
+      php-memcache \
+      php-memcached \
       # Mysql-client added to support eg. drush sqlc
       mysql-client \
       # Git and unzip are required by composer
@@ -44,8 +53,6 @@ RUN \
     apt-get -y install blackfire-php blackfire-agent && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-
-
 
 # Setup fpm paths and log
 RUN \
@@ -86,5 +93,7 @@ COPY files/etc/ /etc/
 COPY files/bin /usr/local/bin/
 
 RUN phpenmod drupal-recommended
+
+ENV PHP_DEFAULT_EXTENSIONS calendar ctype curl dom exif fileinfo ftp gd gettext iconv json mcrypt mysqli mysqlnd opcache pdo pdo_mysql phar posix readline shmop simplexml soap sockets sysvmsg sysvsem sysvshm tokenizer wddx xdebug xml xmlreader xmlwriter xsl mbstring zip
 
 EXPOSE 9000
