@@ -52,7 +52,6 @@ The following PHP extensions will be enabled by default:
  * sysvshm
  * tokenizer
  * wddx
- * xdebug
  * xml
  * xmlreader
  * xmlwriter

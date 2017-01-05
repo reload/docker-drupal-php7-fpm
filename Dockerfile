@@ -94,6 +94,6 @@ COPY files/bin /usr/local/bin/
 
 RUN phpenmod drupal-recommended
 
-ENV PHP_DEFAULT_EXTENSIONS calendar ctype curl dom exif fileinfo ftp gd gettext iconv json mcrypt mysqli mysqlnd opcache pdo pdo_mysql phar posix readline shmop simplexml soap sockets sysvmsg sysvsem sysvshm tokenizer wddx xdebug xml xmlreader xmlwriter xsl mbstring zip
+ENV PHP_DEFAULT_EXTENSIONS calendar ctype curl dom exif fileinfo ftp gd gettext iconv json mcrypt mysqli mysqlnd opcache pdo pdo_mysql phar posix readline shmop simplexml soap sockets sysvmsg sysvsem sysvshm tokenizer wddx xml xmlreader xmlwriter xsl mbstring zip
 
 EXPOSE 9000
