@@ -2,12 +2,15 @@ FROM phusion/baseimage:0.9.19
 
 MAINTAINER Mads H. Danquah <mads@reload.dk>
 
-ENV PHP_VERSION 7.0
+ENV PHP_VERSION 5.6
 
 # Basic package installation
 RUN \
   apt-get update && \
-  DEBIAN_FRONTEND=noninteractive \
+  DEBIAN_FRONTEND=noninteractive apt-get -y install python-software-properties && \
+  # Add a repo that contains php ${PHP_VERSION}
+  LC_ALL=C.UTF-8 add-apt-repository ppa:ondrej/php && \
+  apt-get update && \
     apt-get -y install \
       php${PHP_VERSION}-fpm \
       php${PHP_VERSION}-curl \
