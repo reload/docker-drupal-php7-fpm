@@ -18,6 +18,7 @@ RUN \
       php-xdebug \
       php${PHP_VERSION}-mcrypt \
       php${PHP_VERSION}-soap \
+      php${PHP_VERSION}-sqlite3 \
       php${PHP_VERSION}-zip \
       php${PHP_VERSION}-intl \
       php${PHP_VERSION}-bcmath \
@@ -94,6 +95,6 @@ COPY files/bin /usr/local/bin/
 
 RUN phpenmod drupal-recommended
 
-ENV PHP_DEFAULT_EXTENSIONS calendar ctype curl dom exif fileinfo ftp gd gettext iconv json mcrypt mysqli mysqlnd opcache pdo pdo_mysql phar posix readline shmop simplexml soap sockets sysvmsg sysvsem sysvshm tokenizer wddx xml xmlreader xmlwriter xsl mbstring zip
+ENV PHP_DEFAULT_EXTENSIONS calendar ctype curl dom exif fileinfo ftp gd gettext iconv json mcrypt mysqli mysqlnd opcache pdo pdo_mysql phar posix readline shmop simplexml soap sockets sqlite sysvmsg sysvsem sysvshm tokenizer wddx xml xmlreader xmlwriter xsl mbstring zip
 
 EXPOSE 9000
