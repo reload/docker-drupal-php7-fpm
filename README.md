@@ -47,6 +47,7 @@ The following PHP extensions will be enabled by default:
  * simplexml
  * soap
  * sockets
+ * sqlite
  * sysvmsg
  * sysvsem
  * sysvshm
