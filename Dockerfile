@@ -70,7 +70,8 @@ RUN curl -o /tmp/composer-installer https://getcomposer.org/installer && \
   php -r "if (hash('SHA384', file_get_contents('/tmp/composer-installer')) !== trim(file_get_contents('/tmp/composer-installer.sig'))) { unlink('/tmp/composer-installer'); echo 'Invalid installer' . PHP_EOL; exit(1); }" && \
   php /tmp/composer-installer --version=1.5.1 --filename=composer --install-dir=/usr/local/bin && \
   php -r "unlink('/tmp/composer-installer');" && \
-  php -r "unlink('/tmp/composer-installer.sig');"
+  php -r "unlink('/tmp/composer-installer.sig');" && \
+  composer global require "hirak/prestissimo:^0.3"
 
 # Install drush 8 via composer
 # See http://docs.drush.org/en/master/install-alternative/#install-a-global-drush-via-composer
