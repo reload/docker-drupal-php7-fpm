@@ -2,4 +2,5 @@
 # Tail all relevant logs
 touch /var/log/fpm-php.www.log
 touch /tmp/blackfire.log
-exec tail -F -n 0 /var/log/fpm-php.www.log /tmp/blackfire.log
+touch /var/log/messages
+exec tail -F -n 0 /var/log/fpm-php.www.log /tmp/blackfire.log /var/log/messages
