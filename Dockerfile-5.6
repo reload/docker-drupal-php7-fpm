@@ -1,6 +1,6 @@
 FROM phusion/baseimage:0.9.19
 
-ENV PHP_VERSION 7.0
+ENV PHP_VERSION 5.6
 
 # Basic package installation
 RUN \
@@ -71,8 +71,7 @@ RUN curl -o /tmp/composer-installer https://getcomposer.org/installer && \
   php -r "if (hash('SHA384', file_get_contents('/tmp/composer-installer')) !== trim(file_get_contents('/tmp/composer-installer.sig'))) { unlink('/tmp/composer-installer'); echo 'Invalid installer' . PHP_EOL; exit(1); }" && \
   php /tmp/composer-installer --version=1.5.1 --filename=composer --install-dir=/usr/local/bin && \
   php -r "unlink('/tmp/composer-installer');" && \
-  php -r "unlink('/tmp/composer-installer.sig');" && \
-  composer global require "hirak/prestissimo:^0.3"
+  php -r "unlink('/tmp/composer-installer.sig');"
 
 # Install drush 8 via composer
 # See http://docs.drush.org/en/master/install-alternative/#install-a-global-drush-via-composer
@@ -91,6 +90,10 @@ RUN \
 # Put our configurations in place, done as the last step to be able to override
 # default settings from packages.
 COPY files/etc/ /etc/
+
+RUN \
+    /usr/bin/env sed -i.bak "s%7\.0%5\.6%g" /etc/service/php-fpm/run && \
+    rm /etc/service/php-fpm/run.bak
 
 # Add our tools to PATH.
 COPY files/bin /usr/local/bin/

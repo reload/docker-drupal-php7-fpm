@@ -1,6 +1,6 @@
 FROM phusion/baseimage:0.9.19
 
-ENV PHP_VERSION 7.0
+ENV PHP_VERSION 7.1
 
 # Basic package installation
 RUN \
@@ -91,6 +91,10 @@ RUN \
 # Put our configurations in place, done as the last step to be able to override
 # default settings from packages.
 COPY files/etc/ /etc/
+
+RUN \
+    /usr/bin/env sed -i.bak "s%7\.0%7\.1%g" /etc/service/php-fpm/run && \
+    rm /etc/service/php-fpm/run.bak
 
 # Add our tools to PATH.
 COPY files/bin /usr/local/bin/
