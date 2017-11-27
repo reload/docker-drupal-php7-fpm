@@ -4,4 +4,6 @@ touch /var/log/fpm-php.www.log
 touch /tmp/blackfire.log
 touch /var/log/messages
 touch /var/log/error
-exec tail -F -n 0 /var/log/fpm-php.www.log /tmp/blackfire.log /var/log/messages /var/log/error
+touch /var/log/debug
+touch /var/log/syslog
+exec tail -F -n 0 /var/log/fpm-php.www.log /tmp/blackfire.log /var/log/messages /var/log/error /var/log/debug /var/log/syslog
