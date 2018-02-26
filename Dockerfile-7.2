@@ -91,10 +91,6 @@ RUN \
 # default settings from packages.
 COPY files/etc/ /etc/
 
-RUN \
-    /usr/bin/env sed -i.bak "s%7\.0%7\.1%g" /etc/service/php-fpm/run && \
-    rm /etc/service/php-fpm/run.bak
-
 # Add our tools to PATH.
 COPY files/bin /usr/local/bin/
 
