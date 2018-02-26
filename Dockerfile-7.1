@@ -92,15 +92,13 @@ RUN \
 # default settings from packages.
 COPY files/etc/ /etc/
 
-RUN \
-    /usr/bin/env sed -i.bak "s%7\.0%7\.1%g" /etc/service/php-fpm/run && \
-    rm /etc/service/php-fpm/run.bak
-
 # Add our tools to PATH.
 COPY files/bin /usr/local/bin/
 
 RUN phpenmod drupal-recommended
 
 ENV PHP_DEFAULT_EXTENSIONS calendar ctype curl dom exif fileinfo ftp gd gettext iconv json mcrypt mysqli mysqlnd opcache pdo pdo_mysql phar posix readline shmop simplexml soap sockets sqlite sysvmsg sysvsem sysvshm tokenizer wddx xml xmlreader xmlwriter xsl mbstring zip
+
+HEALTHCHECK CMD ["sh", "-c", "[ -e /tmp/docker-finished-init ]"]
 
 EXPOSE 9000

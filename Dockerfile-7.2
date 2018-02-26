@@ -1,6 +1,6 @@
-FROM phusion/baseimage:0.9.19
+FROM phusion/baseimage:0.10.0
 
-ENV PHP_VERSION 5.6
+ENV PHP_VERSION 7.2
 
 # Basic package installation
 RUN \
@@ -17,7 +17,6 @@ RUN \
       php${PHP_VERSION}-mysql \
       php${PHP_VERSION}-mbstring \
       php-xdebug \
-      php${PHP_VERSION}-mcrypt \
       php${PHP_VERSION}-soap \
       php${PHP_VERSION}-sqlite3 \
       php${PHP_VERSION}-zip \
@@ -71,7 +70,8 @@ RUN curl -o /tmp/composer-installer https://getcomposer.org/installer && \
   php -r "if (hash('SHA384', file_get_contents('/tmp/composer-installer')) !== trim(file_get_contents('/tmp/composer-installer.sig'))) { unlink('/tmp/composer-installer'); echo 'Invalid installer' . PHP_EOL; exit(1); }" && \
   php /tmp/composer-installer --version=1.5.1 --filename=composer --install-dir=/usr/local/bin && \
   php -r "unlink('/tmp/composer-installer');" && \
-  php -r "unlink('/tmp/composer-installer.sig');"
+  php -r "unlink('/tmp/composer-installer.sig');" && \
+  composer global require "hirak/prestissimo:^0.3"
 
 # Install drush 8 via composer
 # See http://docs.drush.org/en/master/install-alternative/#install-a-global-drush-via-composer
@@ -96,7 +96,7 @@ COPY files/bin /usr/local/bin/
 
 RUN phpenmod drupal-recommended
 
-ENV PHP_DEFAULT_EXTENSIONS calendar ctype curl dom exif fileinfo ftp gd gettext iconv json mcrypt mysqli mysqlnd opcache pdo pdo_mysql phar posix readline shmop simplexml soap sockets sqlite sysvmsg sysvsem sysvshm tokenizer wddx xml xmlreader xmlwriter xsl mbstring zip
+ENV PHP_DEFAULT_EXTENSIONS calendar ctype curl dom exif fileinfo ftp gd gettext iconv json mysqli mysqlnd opcache pdo pdo_mysql phar posix readline shmop simplexml soap sockets sqlite sysvmsg sysvsem sysvshm tokenizer wddx xml xmlreader xmlwriter xsl mbstring zip
 
 HEALTHCHECK CMD ["sh", "-c", "[ -e /tmp/docker-finished-init ]"]
 

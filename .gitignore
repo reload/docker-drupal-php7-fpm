@@ -1,0 +1,2 @@
+# Ignore "plain" Dockerfile -- it should be version specific.
+/Dockerfile
