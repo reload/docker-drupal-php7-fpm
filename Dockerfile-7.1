@@ -89,6 +89,13 @@ RUN \
   curl --location --output /usr/local/bin/mhsendmail https://github.com/mailhog/mhsendmail/releases/download/v0.2.0/mhsendmail_linux_amd64 && \
   chmod +x /usr/local/bin/mhsendmail
 
+# Install wait application
+# https://github.com/ufoscout/docker-compose-wait
+ADD \
+  https://github.com/ufoscout/docker-compose-wait/releases/download/2.3.0/wait /wait
+RUN \
+  chmod +x /wait
+
 # Put our configurations in place, done as the last step to be able to override
 # default settings from packages.
 COPY files/etc/ /etc/
