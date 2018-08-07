@@ -1,4 +1,4 @@
-# Generic Drupal-compatible php7 container
+# Generic Drupal-compatible PHP container
 Includes composer and drush, exposes PHP via fpm.
 
 ## Xdebug
