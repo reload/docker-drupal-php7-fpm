@@ -74,14 +74,17 @@ RUN curl -o /tmp/composer-installer https://getcomposer.org/installer && \
   php -r "unlink('/tmp/composer-installer');" && \
   php -r "unlink('/tmp/composer-installer.sig');"
 
-# Install drush 8 via composer
-# See http://docs.drush.org/en/master/install-alternative/#install-a-global-drush-via-composer
-RUN \
-  mkdir --parents /opt/drush-8.x && \
-  cd /opt/drush-8.x && \
-  composer init --require=drush/drush:8.* -n && \
+# Add cgr as a replacement for composer global require.
+# This ensures that dependencies used by applications installed via composer do not conflict.
+RUN mkdir --parents /opt/composer && \
+  cd /opt/composer && \
+  composer init --require=consolidation/cgr:^2 -n && \
   composer config bin-dir /usr/local/bin && \
   composer install
+ENV CGR_BIN_DIR /usr/local/bin
+
+# Install drush 8 via composer
+RUN cgr drush/drush:8.*
 
 # Install mailhog sender for mailhog integration
 RUN \
