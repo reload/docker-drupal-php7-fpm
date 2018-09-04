@@ -89,6 +89,11 @@ RUN \
   curl --location --output /usr/local/bin/mhsendmail https://github.com/mailhog/mhsendmail/releases/download/v0.2.0/mhsendmail_linux_amd64 && \
   chmod +x /usr/local/bin/mhsendmail
 
+# Install goss for health checking
+RUN curl -fsSL https://goss.rocks/install | sh
+COPY goss.yaml /goss/goss.yaml
+ENV GOSS_PHP_VERSION=${PHP_VERSION}
+
 # Put our configurations in place, done as the last step to be able to override
 # default settings from packages.
 COPY files/etc/ /etc/
@@ -100,6 +105,6 @@ RUN phpenmod drupal-recommended
 
 ENV PHP_DEFAULT_EXTENSIONS calendar ctype curl dom exif fileinfo ftp gd gettext iconv json mcrypt mysqli mysqlnd opcache pdo pdo_mysql phar posix readline shmop simplexml soap sockets sqlite sysvmsg sysvsem sysvshm tokenizer wddx xml xmlreader xmlwriter xsl mbstring zip
 
-HEALTHCHECK CMD ["sh", "-c", "[ -e /tmp/docker-finished-init ]"]
+HEALTHCHECK --interval=1s --timeout=5s CMD goss -g /goss/goss.yaml validate
 
 EXPOSE 9000
