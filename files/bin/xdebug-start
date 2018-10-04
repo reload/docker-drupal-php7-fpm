@@ -6,19 +6,38 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 # Disable is done on exit, this means that no matter what happens (eg the
 # user doing a ^C) we will attempt to re-disable xdebug.
-disable() {
+function disable {
     echo '- disabling xdebug' && \
     phpdismod xdebug
+    if should_use_internal_hostname; then 
+        phpdismod xdebug-use-docker-remote-host 
+    fi
     echo '- reloading php-fpm'
     pkill -HUP 'php-fpm'
     exit $?
 }
+
+# Test whether it's ok to use host.docker.internal for xdebug.remote_host.
+#
+# See https://docs.docker.com/docker-for-mac/networking regarding 
+# host.docker.internal
+function should_use_internal_hostname {
+    # Make sure the the user is not providing a remote_host and we can look up
+    # hosts host.docker.internal.
+    [[ ! "${XDEBUG_CONFIG:-}" = *"remote_host"* ]] && getent hosts host.docker.internal > /dev/null
+}
+
 # Trap exit
 trap disable EXIT
 
 # First step is to enable xdebug.
 echo '- enabling xdebug'
 phpenmod xdebug
+if should_use_internal_hostname; then 
+    phpenmod xdebug-use-docker-remote-host 
+    echo '- setting host.docker.internal as remote_host'
+fi
+
 echo '- reloading php-fpm'
 pkill -HUP 'php-fpm'
 
