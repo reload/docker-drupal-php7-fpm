@@ -9,22 +9,24 @@ workflows:
 
 shared: &test
   docker:
-    # Small image which has the key software we need: Docker and Dgoss (or curl needed to instal Dgoss)
-    - image: kiwicom/dgoss
+    - image: docker
   steps:
     - checkout
     - setup_remote_docker
     - run:
-        name: Build image
-        command: docker build --file=Dockerfile-${PHP_VERSION} -t docker-drupal-php7-fpm:sut .
+        name: Build container
+        command: |
+          docker build --file=Dockerfile-${PHP_VERSION} -t sut:latest .
     - run:
         name: Test
         command: |
-          # Needed to work with remote docker - see https://github.com/aelsabbahy/goss/pull/271
-          export GOSS_FILES_STRATEGY=cp
-          # Sleep a bit to ensure that PHP-FPM has time to start up.
-          GOSS_SLEEP=15 dgoss run -e GOSS_PHP_VERSION="${PHP_VERSION}" docker-drupal-php7-fpm:sut
-
+          cid=$(docker create sut:latest)
+          docker start $cid
+          # Validate our configuration. Provide some time to allow PHP-FPM to start up
+          docker exec $cid goss -g /goss/goss.yaml validate --retry-timeout 15s --sleep 1s
+          # If we are valid we should also be healthy
+          health=$(docker inspect --format='{{.State.Health.Status}}' $cid)
+          echo $health | grep "healthy"
 version: 2
 jobs:
   test-5.6:
