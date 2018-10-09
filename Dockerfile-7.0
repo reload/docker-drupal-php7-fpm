@@ -92,12 +92,12 @@ RUN \
   curl --location --output /usr/local/bin/mhsendmail https://github.com/mailhog/mhsendmail/releases/download/v0.2.0/mhsendmail_linux_amd64 && \
   chmod +x /usr/local/bin/mhsendmail
 
-# Install wait application
-# https://github.com/ufoscout/docker-compose-wait
+# Install wait-for-it application
+# https://github.com/vishnubob/wait-for-it
 ADD \
-  https://github.com/ufoscout/docker-compose-wait/releases/download/2.3.0/wait /wait
+  https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh /usr/local/bin/wait-for-it
 RUN \
-  chmod +x /wait
+  chmod +x /usr/local/bin/wait-for-it
 
 # Put our configurations in place, done as the last step to be able to override
 # default settings from packages.
