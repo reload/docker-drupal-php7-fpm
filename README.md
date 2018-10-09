@@ -175,3 +175,9 @@ services:
 ```
 
 In the above examples the mailhog interface will be accessible on port 8025.
+
+
+## [Wait application](https://github.com/ufoscout/docker-compose-wait)
+
+Allows for waiting on containers, that containers created from these images
+depends upon.
