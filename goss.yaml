@@ -21,3 +21,6 @@ command:
     exit-status: 0
   drush:
     exit-status: 0
+  # Test wait-for-it by testing a port we know is available at this point.
+  "wait-for-it -t 5 localhost:9000":
+    exit-status: 0
