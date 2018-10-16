@@ -109,6 +109,6 @@ RUN phpenmod drupal-recommended
 
 ENV PHP_DEFAULT_EXTENSIONS calendar ctype curl dom exif fileinfo ftp gd gettext iconv json mcrypt mysqli mysqlnd opcache pdo pdo_mysql phar posix readline shmop simplexml soap sockets sqlite sysvmsg sysvsem sysvshm tokenizer wddx xml xmlreader xmlwriter xsl mbstring zip
 
-HEALTHCHECK CMD ["sh", "-c", "[ -e /tmp/docker-finished-init ]"]
+HEALTHCHECK --interval=5s CMD ["sh", "-c", "[ -e /tmp/docker-finished-init ]"]
 
 EXPOSE 9000
