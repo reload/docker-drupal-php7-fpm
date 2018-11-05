@@ -40,6 +40,7 @@ The following PHP extensions will be enabled by default:
  * opcache
  * pdo
  * pdo_mysql
+ * pdo_sqlite
  * phar
  * posix
  * readline
