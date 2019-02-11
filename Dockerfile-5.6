@@ -4,11 +4,9 @@ ENV PHP_VERSION 5.6
 
 # Basic package installation
 RUN \
-  apt-get update && \
   # Add a repo that contains php ${PHP_VERSION}
   LC_ALL=C.UTF-8 add-apt-repository ppa:ondrej/php && \
-  apt-get update && \
-    apt-get -y install \
+  install_clean \
       php${PHP_VERSION}-fpm \
       php${PHP_VERSION}-curl \
       php${PHP_VERSION}-gd \
@@ -35,10 +33,7 @@ RUN \
       iputils-ping \
       telnet \
       imagemagick \
-      patch \
-  && \
-  apt-get clean && \
-  rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+      patch
 
 # We disable xdebug pr default and leave it up to the user of the image to
 # enable at runtime. We disable it right away so that composer used in a
@@ -50,11 +45,7 @@ RUN phpdismod xdebug
 RUN \
   wget -O - https://packages.blackfire.io/gpg.key | apt-key add - && \
   echo "deb http://packages.blackfire.io/debian any main" | tee /etc/apt/sources.list.d/blackfire.list && \
-  apt-get update && \
-  DEBIAN_FRONTEND=noninteractive \
-    apt-get -y install blackfire-php blackfire-agent && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+  install_clean blackfire-php blackfire-agent
 
 # Setup fpm paths and log
 RUN \
