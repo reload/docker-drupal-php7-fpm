@@ -13,6 +13,8 @@ shared: &test
     - image: kiwicom/dgoss
   steps:
     - checkout
+    - run: apk --update add git
+    - run: git clean -fd
     - setup_remote_docker
     - run:
         name: Build image
