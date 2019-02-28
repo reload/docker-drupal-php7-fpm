@@ -1,0 +1,8 @@
+ARG VERSION
+FROM docker-drupal-php7-fpm:sut-${VERSION}
+
+RUN mkdir /goss && \
+        curl -L https://github.com/aelsabbahy/goss/releases/download/v0.3.6/goss-linux-amd64 -o /goss/goss && \
+        chmod +rx /goss/goss
+
+COPY goss.yaml /goss
