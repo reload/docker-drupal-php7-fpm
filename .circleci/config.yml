@@ -6,6 +6,7 @@ workflows:
       - test-7.0
       - test-7.1
       - test-7.2
+      - test-7.3
 
 shared: &test
   docker:
@@ -45,3 +46,7 @@ jobs:
     <<: *test
     environment:
       PHP_VERSION: "7.2"
+  test-7.3:
+    <<: *test
+    environment:
+      PHP_VERSION: "7.3"
