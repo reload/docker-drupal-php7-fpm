@@ -69,8 +69,9 @@ want enabled in the environment variable `PHP_DEFAULT_EXTENSIONS`.
 
 Currently the following extra extensions are supported:
 
- * intl
  * bcmath
+ * imagick
+ * intl
 
 ## Blackfire integration
 If the image is run with the environment-variable BLACKFIRE_SOCKET set a blackfire php-probe will be enabled and configured to use the socket. The variable is expected to point to a running blackfire agent.
