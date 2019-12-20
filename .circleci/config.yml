@@ -50,3 +50,7 @@ jobs:
     <<: *test
     environment:
       PHP_VERSION: "7.3"
+  test-7.4:
+    <<: *test
+    environment:
+      PHP_VERSION: "7.4"
