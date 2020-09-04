@@ -50,7 +50,7 @@ RUN \
 
 # Setup fpm paths and log
 RUN \
-  mkdir /run/php/ && \
+  mkdir -p /run/php/ && \
   chown www-data:www-data /run/php/ && \
   touch /var/log/fpm-php.www.log && \
   chown www-data:www-data /var/log/fpm-php.www.log
