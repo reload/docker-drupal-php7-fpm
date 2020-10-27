@@ -7,6 +7,7 @@ workflows:
       - test-7.1
       - test-7.2
       - test-7.3
+      - test-7.4
 
 shared: &test
   docker:
