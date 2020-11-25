@@ -1,0 +1,28 @@
+on: pull_request
+name: Run Goss tests
+
+jobs:
+  goss_test:
+    name: Goss test
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php:
+          # Strings, so they wont be parsed as floats which would
+          # transform "7.0" into "7".
+          - "5.6"
+          - "7.0"
+          - "7.1"
+          - "7.2"
+          - "7.3"
+          - "7.4"
+    steps:
+    - uses: actions/checkout@master
+    - uses: e1himself/goss-installation-action@v1.0.3
+    - name: Build image
+      run: |
+        docker build --file=Dockerfile-${{ matrix.php }} -t docker-drupal-php7-fpm:sut .
+    - name: Test image
+      run: |
+        GOSS_SLEEP=15 dgoss run -e GOSS_PHP_VERSION="${{ matrix.php }}" docker-drupal-php7-fpm:sut
+
