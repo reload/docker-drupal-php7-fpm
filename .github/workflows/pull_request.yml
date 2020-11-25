@@ -24,5 +24,6 @@ jobs:
         docker build --file=Dockerfile-${{ matrix.php }} -t docker-drupal-php7-fpm:sut .
     - name: Test image
       run: |
+        # Sleep a bit to ensure that PHP-FPM has time to start up.
         GOSS_SLEEP=15 dgoss run -e GOSS_PHP_VERSION="${{ matrix.php }}" docker-drupal-php7-fpm:sut
 
