@@ -55,16 +55,9 @@ RUN \
   touch /var/log/fpm-php.www.log && \
   chown www-data:www-data /var/log/fpm-php.www.log
 
-# Install composer 1.6.5  using the latest installer.
-# We compare the downloaded installer with a hash from a second source to reduce
-# the chanche we're downloading a compromised installer.
-RUN curl -o /tmp/composer-installer https://getcomposer.org/installer && \
-  curl -o /tmp/composer-installer.sig https://composer.github.io/installer.sig &&  \
-  php -r "if (hash('SHA384', file_get_contents('/tmp/composer-installer')) !== trim(file_get_contents('/tmp/composer-installer.sig'))) { unlink('/tmp/composer-installer'); echo 'Invalid installer' . PHP_EOL; exit(1); }" && \
-  php /tmp/composer-installer --version=1.6.5 --filename=composer --install-dir=/usr/local/bin && \
-  php -r "unlink('/tmp/composer-installer');" && \
-  php -r "unlink('/tmp/composer-installer.sig');" && \
-  composer global require "hirak/prestissimo:^0.3"
+# Copy Composer in from official images
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+COPY --from=composer:1 /usr/bin/composer /usr/bin/composer-1
 
 # Add cgr as a replacement for composer global require.
 # This ensures that dependencies used by applications installed via composer do not conflict.
