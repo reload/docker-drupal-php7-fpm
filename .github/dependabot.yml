@@ -7,6 +7,14 @@ updates:
     time: '04:00'
     timezone: Europe/Copenhagen
   open-pull-requests-limit: 10
-  assignees:
-  - arnested
-  - danquah
+  reviewers:
+  - "reload/developers"
+- package-ecosystem: github-actions
+  directory: "/"
+  schedule:
+    interval: daily
+    time: '04:00'
+    timezone: Europe/Copenhagen
+  open-pull-requests-limit: 10
+  reviewers:
+  - "reload/developers"
