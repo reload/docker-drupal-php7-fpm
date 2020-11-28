@@ -3,6 +3,12 @@ FROM phusion/baseimage:0.11
 
 ENV PHP_VERSION 7.0
 
+# Install updates (mostly for security updates)
+RUN apt-get -q update && apt-get -qy upgrade \
+    && apt-get -qy autoremove \
+    && apt-get clean \
+    && rm -r /var/lib/apt/lists/*
+
 # Basic package installation
 RUN \
   # Add a repo that contains php ${PHP_VERSION}
