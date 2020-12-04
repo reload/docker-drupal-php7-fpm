@@ -6,6 +6,7 @@ jobs:
     name: Goss test
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         php:
           # Strings, so they wont be parsed as floats which would
@@ -18,7 +19,11 @@ jobs:
           - "7.4"
           - "8.0"
     steps:
-    - uses: actions/checkout@master
+    - uses: actions/checkout@v2
+    - name: Run hadolint
+      uses: brpaz/hadolint-action@v1.3.1
+      with:
+        dockerfile: Dockerfile-${{ matrix.php }}
     - uses: e1himself/goss-installation-action@v1.0.3
     - name: Build image
       run: |
