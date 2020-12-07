@@ -1,9 +1,15 @@
 # -*- Dockerfile -*-
+FROM composer:1 AS composer-1
+FROM composer:2 AS composer-2
+
 FROM phusion/baseimage:0.11
 
 ENV PHP_VERSION 7.1
 
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+
 # Install updates (mostly for security updates)
+# hadolint ignore=DL3005
 RUN apt-get -q update && apt-get -qy upgrade \
     && apt-get -qy autoremove \
     && apt-get clean \
@@ -51,7 +57,7 @@ RUN phpdismod xdebug
 # Add the blackfire repo and install the php-probe.
 # We also fetch the blackfire-agent to get access to the commandlineuploader.
 RUN \
-  wget -O - https://packages.blackfire.io/gpg.key | apt-key add - && \
+  curl -sSL https://packages.blackfire.io/gpg.key | apt-key add - && \
   echo "deb http://packages.blackfire.io/debian any main" | tee /etc/apt/sources.list.d/blackfire.list && \
   install_clean blackfire-php blackfire-agent
 
@@ -63,14 +69,12 @@ RUN \
   chown www-data:www-data /var/log/fpm-php.www.log
 
 # Copy Composer in from official images
-COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
-COPY --from=composer:1 /usr/bin/composer /usr/bin/composer-1
+COPY --from=composer-2 /usr/bin/composer /usr/bin/composer
+COPY --from=composer-1 /usr/bin/composer /usr/bin/composer-1
 
 # Add cgr as a replacement for composer global require.
 # This ensures that dependencies used by applications installed via composer do not conflict.
-RUN mkdir --parents /opt/composer && \
-  cd /opt/composer && \
-  composer init --require=consolidation/cgr:^2 -n && \
+RUN composer init --require=consolidation/cgr:^2 -n && \
   composer config bin-dir /usr/local/bin && \
   composer install
 ENV CGR_BIN_DIR /usr/local/bin
