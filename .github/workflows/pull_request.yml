@@ -2,22 +2,23 @@ on: pull_request
 name: Run Goss tests
 
 jobs:
+  php-versions:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.php-versions.outputs.matrix }}
+    steps:
+    - uses: actions/checkout@v2.3.3
+    - name: Lookup PHP versions from Dockerfile-* names
+      run: echo ::set-output name=matrix::$(ls Dockerfile-* | cut -c 12- | jq --raw-input --slurp 'split("\n") | map(select(. != ""))')
+      id: php-versions
   goss_test:
     name: Goss test
     runs-on: ubuntu-latest
+    needs: php-versions
     strategy:
       fail-fast: false
       matrix:
-        php:
-          # Strings, so they wont be parsed as floats which would
-          # transform "7.0" into "7".
-          - "5.6"
-          - "7.0"
-          - "7.1"
-          - "7.2"
-          - "7.3"
-          - "7.4"
-          - "8.0"
+        php: ${{ fromJSON(needs.php-versions.outputs.matrix) }}
     steps:
     - uses: actions/checkout@v2
     - name: Run hadolint
