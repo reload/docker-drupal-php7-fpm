@@ -30,7 +30,7 @@ jobs:
         tags: "reload/drupal-php7-fpm:${{ matrix.php }}"
         push: false
     - name: Anchore Container Vulnerability Scan
-      uses: anchore/scan-action@v2
+      uses: anchore/scan-action@v2.0.4
       id: scan
       with:
         image: "reload/drupal-php7-fpm:${{ matrix.php }}"
