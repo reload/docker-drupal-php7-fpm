@@ -35,6 +35,7 @@ jobs:
       with:
         image: "reload/drupal-php7-fpm:${{ matrix.php }}"
         acs-report-enable: true
+        fail-build: false
     - name: Include PHP version in SARIF report
       if: ${{ always() }}
       run: |
