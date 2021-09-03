@@ -30,11 +30,12 @@ jobs:
         tags: "reload/drupal-php7-fpm:${{ matrix.php }}"
         push: false
     - name: Anchore Container Vulnerability Scan
-      uses: anchore/scan-action@v2
+      uses: anchore/scan-action@v3
       id: scan
       with:
         image: "reload/drupal-php7-fpm:${{ matrix.php }}"
         acs-report-enable: true
+        fail-build: false
     - name: Include PHP version in SARIF report
       if: ${{ always() }}
       run: |
