@@ -30,6 +30,12 @@ jobs:
       uses: docker/login-action@v1
       if: ${{ github.ref == format('refs/heads/{0}', github.event.repository.default_branch) }}
       with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+    - name: Login to GitHub Container Registry
+      uses: docker/login-action@v1
+      if: ${{ github.ref == format('refs/heads/{0}', github.event.repository.default_branch) }}
+      with:
         registry: ghcr.io
         username: ${{ github.repository_owner }}
         password: ${{ secrets.GITHUB_TOKEN }}
@@ -46,3 +52,4 @@ jobs:
           org.opencontainers.image.revision=${{ github.sha }}
         tags: |
           ghcr.io/${{ github.repository }}:${{ matrix.php }}
+          reload/drupal-php7-fpm:${{ matrix.php }}
