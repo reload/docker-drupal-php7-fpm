@@ -1,8 +1,4 @@
-on:
-  workflow_run:
-    workflows: ["Goss tests"]
-    types:
-      - completed
+on: push
 
 name: Docker build and push
 jobs:
@@ -49,4 +45,4 @@ jobs:
           org.opencontainers.image.version=${{ matrix.php }}-${{ github.sha }}
           org.opencontainers.image.revision=${{ github.sha }}
         tags: |
-          reload/drupal-php7-fpm:${{ matrix.php }}
+          ghcr.io/${{ github.repository }}:${{ matrix.php }}
