@@ -1,0 +1,52 @@
+on:
+  workflow_run:
+    workflows: ["Goss tests"]
+    types:
+      - completed
+
+name: Docker build and push
+jobs:
+  php-versions:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.php-versions.outputs.matrix }}
+    steps:
+    - uses: actions/checkout@v2
+    - name: Lookup PHP versions from Dockerfile-* names
+      run: echo ::set-output name=matrix::$(ls Dockerfile-* | cut -c 12- | jq --raw-input --slurp 'split("\n") | map(select(. != ""))')
+      id: php-versions
+  build:
+    name: Docker build and push
+    if: >
+      ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    needs: php-versions
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ${{ fromJSON(needs.php-versions.outputs.matrix) }}
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Docker Buildx
+      id: buildx
+      uses: docker/setup-buildx-action@master
+    - name: Login to DockerHub
+      uses: docker/login-action@v1
+      if: ${{ github.ref == format('refs/heads/{0}', github.event.repository.default_branch) }}
+      with:
+        registry: ghcr.io
+        username: ${{ github.repository_owner }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+    - name: Build and push Docker images
+      uses: docker/build-push-action@v2
+      with:
+        file: Dockerfile-${{ matrix.php }}
+        builder: ${{ steps.buildx.outputs.name }}
+        push: ${{ github.ref == format('refs/heads/{0}', github.event.repository.default_branch) }}
+        context: .
+        labels: |
+          org.opencontainers.image.source=https://github.com/${{ github.repository }}
+          org.opencontainers.image.version=${{ matrix.php }}-${{ github.sha }}
+          org.opencontainers.image.revision=${{ github.sha }}
+        tags: |
+          reload/drupal-php7-fpm:${{ matrix.php }}
