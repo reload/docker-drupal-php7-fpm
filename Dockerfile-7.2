@@ -53,6 +53,10 @@ RUN \
 # later step runs a bit faster.
 RUN phpdismod xdebug
 
+# Workaround problem in recent PHP versions.
+# @see https://bugs.php.net/81424
+RUN install_clean libpcre2-16-0 libpcre2-8-0 libpcre2-32-0
+
 # Add the blackfire repo and install the php-probe.
 # We also fetch the blackfire-agent to get access to the commandlineuploader.
 RUN \
