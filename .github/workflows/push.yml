@@ -22,7 +22,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Run hadolint
-      uses: brpaz/hadolint-action@v1.5.0
+      uses: hadolint/hadolint-action@v1.6.0
       with:
         dockerfile: Dockerfile-${{ matrix.php }}
     - uses: e1himself/goss-installation-action@v1.0.4
