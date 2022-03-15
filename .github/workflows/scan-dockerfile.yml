@@ -29,6 +29,7 @@ jobs:
         builder: ${{ steps.buildx.outputs.name }}
         tags: "reload/drupal-php7-fpm:${{ matrix.php }}"
         push: false
+        load: true
     - name: Anchore Container Vulnerability Scan
       uses: anchore/scan-action@v3
       id: scan

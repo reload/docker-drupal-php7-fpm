@@ -1,0 +1,113 @@
+# -*- Dockerfile -*-
+FROM composer:1 AS composer-1
+FROM composer:2 AS composer-2
+
+FROM phusion/baseimage:focal-1.1.0
+
+ENV PHP_VERSION 8.1
+
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+
+# Install updates (mostly for security updates)
+# hadolint ignore=DL3005
+RUN apt-get -q update && apt-get -qy upgrade \
+    && apt-get -qy autoremove \
+    && apt-get clean \
+    && rm -r /var/lib/apt/lists/*
+
+# Basic package installation
+RUN \
+  # Add a repo that contains php ${PHP_VERSION}
+  LC_ALL=C.UTF-8 add-apt-repository ppa:ondrej/php && \
+  install_clean \
+      php${PHP_VERSION}-fpm \
+      php${PHP_VERSION}-curl \
+      php${PHP_VERSION}-gd \
+      php${PHP_VERSION}-xml \
+      php${PHP_VERSION}-mysql \
+      php${PHP_VERSION}-mbstring \
+      php${PHP_VERSION}-xdebug \
+      php${PHP_VERSION}-soap \
+      php${PHP_VERSION}-sqlite3 \
+      php${PHP_VERSION}-zip \
+      php${PHP_VERSION}-intl \
+      php${PHP_VERSION}-bcmath \
+      php${PHP_VERSION}-imagick \
+      php${PHP_VERSION}-memcache \
+      php${PHP_VERSION}-memcached \
+      # mariadb-client added to support eg. drush sqlc
+      mariadb-client \
+      # Git and unzip are required by composer
+      git \
+      unzip \
+      wget \
+      dnsutils \
+      curl \
+      iputils-ping \
+      telnet \
+      imagemagick \
+      patch
+
+# FPM only listens to a socket file per default, instruct it to listen on port 9000.
+RUN sed -i 's/^listen.*/listen = 9000/g' /etc/php/8.1/fpm/pool.d/www.conf
+
+# We disable xdebug pr default and leave it up to the user of the image to
+# enable at runtime. We disable it right away so that composer used in a
+# later step runs a bit faster.
+RUN phpdismod xdebug
+
+# Workaround problem in recent PHP versions.
+# @see https://bugs.php.net/81424
+RUN install_clean libpcre2-16-0 libpcre2-8-0 libpcre2-32-0
+
+# Add the blackfire repo and install the php-probe.
+# We also fetch the blackfire-agent to get access to the commandlineuploader.
+# @TODO Blackfire has no PHP 8.1 version yet.
+# RUN \
+#   curl -sSL https://packages.blackfire.io/gpg.key | apt-key add - && \
+#   echo "deb http://packages.blackfire.io/debian any main" | tee /etc/apt/sources.list.d/blackfire.list && \
+#   install_clean blackfire-php blackfire-agent
+
+# Setup fpm paths and log
+RUN \
+  mkdir -p /run/php/ && \
+  chown www-data:www-data /run/php/ && \
+  touch /var/log/fpm-php.www.log && \
+  chown www-data:www-data /var/log/fpm-php.www.log
+
+# Copy Composer in from official images
+COPY --from=composer-2 /usr/bin/composer /usr/bin/composer
+COPY --from=composer-1 /usr/bin/composer /usr/bin/composer-1
+
+# Let composer global intall in /usr/local/bin.
+RUN composer global config bin-dir /usr/local/bin
+
+# Install drush 10 via composer
+RUN composer global require drush/drush:10.*
+
+# Install mailhog sender for mailhog integration
+RUN \
+  curl --location --output /usr/local/bin/mhsendmail https://github.com/mailhog/mhsendmail/releases/download/v0.2.0/mhsendmail_linux_amd64 && \
+  chmod +x /usr/local/bin/mhsendmail
+
+# Install wait-for-it application
+# https://github.com/vishnubob/wait-for-it
+ADD \
+  https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh /usr/local/bin/wait-for-it
+RUN \
+  chmod +x /usr/local/bin/wait-for-it
+
+# Put our configurations in place, done as the last step to be able to override
+# default settings from packages.
+COPY files/etc/ /etc/
+
+# Add our tools to PATH.
+COPY files/bin /usr/local/bin/
+
+RUN phpenmod drupal-recommended
+
+ENV PHP_DEFAULT_EXTENSIONS calendar ctype curl dom exif fileinfo ftp gd gettext iconv json mysqli mysqlnd opcache pdo pdo_mysql pdo_sqlite phar posix readline shmop simplexml soap sockets sqlite sysvmsg sysvsem sysvshm tokenizer wddx xml xmlreader xmlwriter xsl mbstring zip
+
+HEALTHCHECK --interval=5s CMD ["sh", "-c", "[ -e /tmp/docker-finished-init ]"]
+
+EXPOSE 9000
