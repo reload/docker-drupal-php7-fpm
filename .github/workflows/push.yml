@@ -25,6 +25,7 @@ jobs:
       uses: hadolint/hadolint-action@v1.7.0
       with:
         dockerfile: Dockerfile-${{ matrix.php }}
+        trusted-registries: docker.io
     - uses: e1himself/goss-installation-action@v1.0.4
     - name: Build image
       run: |
