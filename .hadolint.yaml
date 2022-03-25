@@ -1,0 +1,5 @@
+ignored:
+  # Allowing consecutive RUN instructions. We use them to lump big
+  # chunks together.
+  - DL3059
+  
