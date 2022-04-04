@@ -38,6 +38,10 @@ jobs:
         acs-report-enable: true
         fail-build: false
         severity-cutoff: critical
+    - name: debug
+      if: ${{ always() }}
+      run: |
+        cat ${{ steps.scan.outputs.sarif }}
     - name: Include PHP version in SARIF report
       if: ${{ always() }}
       run: |
