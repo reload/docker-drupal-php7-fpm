@@ -19,8 +19,6 @@ port:
 command:
   composer:
     exit-status: 0
-  composer-1:
-    exit-status: 0
   drush:
     exit-status: 0
   # Test wait-for-it by testing a port we know is available at this point.
