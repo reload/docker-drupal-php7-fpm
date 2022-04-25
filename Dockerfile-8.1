@@ -1,7 +1,4 @@
 # -*- Dockerfile -*-
-FROM composer:1 AS composer-1
-FROM composer:2 AS composer-2
-
 FROM phusion/baseimage:focal-1.2.0
 
 ENV PHP_VERSION 8.1
@@ -75,9 +72,9 @@ RUN \
   touch /var/log/fpm-php.www.log && \
   chown www-data:www-data /var/log/fpm-php.www.log
 
-# Copy Composer in from official images
-COPY --from=composer-2 /usr/bin/composer /usr/bin/composer
-COPY --from=composer-1 /usr/bin/composer /usr/bin/composer-1
+# Copy Composer in from official image
+# hadolint ignore=DL3022
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 # Let composer global intall in /usr/local/bin.
 RUN composer global config bin-dir /usr/local/bin
