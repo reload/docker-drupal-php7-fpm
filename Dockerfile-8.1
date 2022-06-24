@@ -45,9 +45,6 @@ RUN \
       imagemagick \
       patch
 
-# FPM only listens to a socket file per default, instruct it to listen on port 9000.
-RUN sed -i 's/^listen.*/listen = 9000/g' /etc/php/8.1/fpm/pool.d/www.conf
-
 # We disable xdebug pr default and leave it up to the user of the image to
 # enable at runtime. We disable it right away so that composer used in a
 # later step runs a bit faster.
