@@ -26,7 +26,7 @@ jobs:
       with:
         dockerfile: Dockerfile-${{ matrix.php }}
         trusted-registries: docker.io
-    - uses: e1himself/goss-installation-action@v1.0.4
+    - uses: e1himself/goss-installation-action@v1.1.0
     - name: Build image
       run: |
         docker build --file=Dockerfile-${{ matrix.php }} -t docker-drupal-php7-fpm:sut .
