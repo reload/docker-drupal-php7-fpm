@@ -91,7 +91,7 @@ version: "2"
 
 services:
     php:
-        image: reload/drupal-php7-fpm
+        image: ghcr.io/reload/docker-drupal-php7-fpm:8.1
         ports:
           - '9000:9000'
         links:
@@ -119,7 +119,7 @@ version: "2"
 
 services:
   php:
-    image: reload/drupal-php7-fpm
+    image: ghcr.io/reload/docker-drupal-php7-fpm:8.1
     links:
       - db
     environment:
@@ -157,7 +157,7 @@ version: "2"
 
 services:
     php:
-      image: reload/drupal-php7-fpm
+      image: ghcr.io/reload/docker-drupal-php7-fpm:8.1
       ...
       environment:
         PHP_SENDMAIL_PATH: /usr/local/bin/mhsendmail --smtp-addr="mailhog:1025"
@@ -180,7 +180,7 @@ version: "2"
 
 services:
   php:
-    image: reload/drupal-php7-fpm
+    image: ghcr.io/reload/docker-drupal-php7-fpm:8.1
     ...
     environment:
       SOME_IMPORTANT_ENV: 'secret'
