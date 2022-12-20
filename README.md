@@ -100,7 +100,7 @@ services:
           BLACKFIRE_SOCKET: 'tcp://blackfire:8707'
 
     blackfire:
-        image: blackfire/blackfire
+        image: blackfire/blackfire:2
         ports:
          - '8707:8707'
         environment:
@@ -135,7 +135,7 @@ services:
       BLACKFIRE_SOCKET: 'tcp://blackfire:8707'
 
 blackfire:
-    image: blackfire/blackfire
+    image: blackfire/blackfire:2
     ports:
      - '8707:8707'
     environment:
