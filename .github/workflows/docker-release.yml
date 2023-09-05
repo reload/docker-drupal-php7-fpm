@@ -7,7 +7,7 @@ jobs:
     outputs:
       matrix: ${{ steps.php-versions.outputs.matrix }}
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Lookup PHP versions from Dockerfile-* names
       run: echo ::set-output name=matrix::$(ls Dockerfile-* | cut -c 12- | jq --raw-input --slurp 'split("\n") | map(select(. != ""))')
       id: php-versions
@@ -22,7 +22,7 @@ jobs:
       matrix:
         php: ${{ fromJSON(needs.php-versions.outputs.matrix) }}
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Set up QEMU
       uses: docker/setup-qemu-action@v2
     - name: Set up Docker Buildx
